@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">QuizzCraft</string>
-    <string name="btn_start">Nouvelle partie</string>
-    <string name="btn_validate">Validation</string>
+    <string name="btn_play_question">Nouvelle question</string>
+    <string name="btn_play_verify">Vérification</string>
     <string name="textview_default_question">Question...</string>
     <string name="radiobtn_default_answer_1">Réponse A</string>
     <string name="radiobtn_default_answer_2">Réponse B</string>

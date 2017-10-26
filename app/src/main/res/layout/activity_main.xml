@@ -12,23 +12,14 @@
 
         <Button
             android:id="@+id/button_start"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="20dp"
-            android:text="@string/btn_start"
+
+            android:layout_marginLeft="10dp"
+            android:text="@string/btn_play_question"
             />
 
-        <Button
-            android:id="@+id/button_validate"
-            android:layout_width="fill_parent"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-           android:layout_marginRight="20dp"
-            android:text="@string/btn_validate"
-            />
-
-    </LinearLayout>
+         </LinearLayout>
 
     <TextView
         android:id="@+id/textview_question"
