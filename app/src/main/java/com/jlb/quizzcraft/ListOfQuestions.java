@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class ListOfQuestions {
 
-    private ArrayList<QA> list = new ArrayList<QA>();
+    private static ArrayList<QA> list = new ArrayList<QA>();
 
     public ListOfQuestions() {
         // Template :   list.add(new QA("<question>", "<réponse_1>", "<réponse_2>", "<réponse_3>", "<réponse_4>",  numéro_bonne_réponse), "image")

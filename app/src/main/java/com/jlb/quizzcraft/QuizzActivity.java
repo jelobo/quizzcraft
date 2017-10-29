@@ -1,9 +1,12 @@
 package com.jlb.quizzcraft;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DialogTitle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,8 +16,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import static com.jlb.quizzcraft.R.id.image;
-
 public class QuizzActivity extends AppCompatActivity {
 
     QA currentQA = new QA();
@@ -22,6 +23,7 @@ public class QuizzActivity extends AppCompatActivity {
     private int mReponse = 0;
     private int mEtoiles = 4;
     private int mNbQuestions = 1;
+    private int mScore = 0;
 
     private Button btn_next = null;
     private TextView textview_question = null;
@@ -34,6 +36,7 @@ public class QuizzActivity extends AppCompatActivity {
     private RatingBar rating_bar = null;
     private ImageView image = null;
 
+    // Listener des bouton radios liés aux réponses
     private View.OnClickListener clikListenerRadioBtn = new View.OnClickListener() {
         public void onClick(View v) {
 
@@ -59,8 +62,48 @@ public class QuizzActivity extends AppCompatActivity {
                 textview_result.setTextColor(Color.GREEN);
                 textview_result.setText("Félicitations, tu as trouvé la bonne réponse !");
 
+                // Mise à jour du score
+                mScore += mEtoiles;
+
+                // Fin de partie ?
+                if (mNbQuestions == 5) {
+
+                    // Création d'une boite de dialogue (pop-up)
+                    AlertDialog.Builder builder = new AlertDialog.Builder(QuizzActivity.this);
+                    builder.setTitle("Partie terminée");
+                    builder.setMessage("Votre score est de " + Integer.toString(mScore) + " / 20");
+                    builder.setCancelable(false);
+
+                    // Bouton "Rejouer" -> nouvelle partie
+                    builder.setPositiveButton("Rejouer", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            // Ré-initialisation des variables
+                            mEtoiles = 4;
+                            mNbQuestions = 0;
+                            mScore = 0;
+
+                            // Simule un click sur le bouton "Suivant" pour lancer une nouvelle partie
+                            btn_next.callOnClick();
+
+                            dialog.cancel();
+                        }
+                    });
+
+                    // Bouton "Quitter" -> ferme l'application
+                    builder.setNegativeButton("Quitter", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            finish();
+                        }
+
+                    }).show();
+
+                }
+
                 // Change le texte du bouton
                 btn_next.setVisibility(View.VISIBLE);
+
             } else {
                 textview_result.setTextColor(Color.RED);
                 textview_result.setText("Ce n'est pas la bonne réponse, ré-essaie !");
@@ -71,13 +114,14 @@ public class QuizzActivity extends AppCompatActivity {
         }
     };
 
+    // Listener du bouton "Suivant"
     public View.OnClickListener clickListenerNextBtn = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
 
             // Mise à jour du compteur de questions
             mNbQuestions++;
-            setTitle("Question "+Integer.toString(mNbQuestions)+"/5");
+            setTitle("Question " + Integer.toString(mNbQuestions) + "/5");
 
             // Pose une question
             currentQA = questionnaire.askQuestion();
@@ -86,7 +130,7 @@ public class QuizzActivity extends AppCompatActivity {
             radiobtn_reponse_2.setText(currentQA.getAnswer_2());
             radiobtn_reponse_3.setText(currentQA.getAnswer_3());
             radiobtn_reponse_4.setText(currentQA.getAnswer_4());
-            int imageId=getResources().getIdentifier(currentQA.getImage(), "drawable", "com.jlb.quizzcraft");
+            int imageId = getResources().getIdentifier(currentQA.getImage(), "drawable", "com.jlb.quizzcraft");
             image.setImageDrawable(getResources().getDrawable(imageId));
 
             // Dé-sélectionne les boutons radios
@@ -101,6 +145,7 @@ public class QuizzActivity extends AppCompatActivity {
 
             // Désactive le bouton "Next"
             btn_next.setVisibility(View.INVISIBLE);
+
         }
     };
 
@@ -150,7 +195,6 @@ public class QuizzActivity extends AppCompatActivity {
 
         // Désactive le bouton "Next"
         btn_next.setVisibility(View.INVISIBLE);
-
 
     }
 }
