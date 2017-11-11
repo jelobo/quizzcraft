@@ -1,12 +1,10 @@
 package com.jlb.quizzcraft;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.DialogTitle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,7 +12,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class QuizzActivity extends AppCompatActivity {
 
@@ -40,16 +37,20 @@ public class QuizzActivity extends AppCompatActivity {
     private View.OnClickListener clikListenerRadioBtn = new View.OnClickListener() {
         public void onClick(View v) {
 
+            // Récupère l'ID du bouton radio coché
             switch (radiogroup_reponses.getCheckedRadioButtonId()) {
                 case R.id.radiobtn_anwser_1:
                     mReponse = 1;
                     break;
+
                 case R.id.radiobtn_anwser_2:
                     mReponse = 2;
                     break;
+
                 case R.id.radiobtn_anwser_3:
                     mReponse = 3;
                     break;
+
                 case R.id.radiobtn_anwser_4:
                     mReponse = 4;
                     break;
@@ -58,6 +59,7 @@ public class QuizzActivity extends AppCompatActivity {
                     mReponse = 0;
             }
 
+            // Réponse trouvée ?
             if (mReponse == currentQA.getResult()) {
                 textview_result.setTextColor(Color.GREEN);
                 textview_result.setText("Félicitations, tu as trouvé la bonne réponse !");
@@ -104,10 +106,12 @@ public class QuizzActivity extends AppCompatActivity {
                 // Change le texte du bouton
                 btn_next.setVisibility(View.VISIBLE);
 
+            // Réponse incorrecte
             } else {
                 textview_result.setTextColor(Color.RED);
                 textview_result.setText("Ce n'est pas la bonne réponse, ré-essaie !");
 
+                // Décrémente le rating bar
                 if (mEtoiles > 0) mEtoiles--;
                 rating_bar.setRating(mEtoiles);
             }
@@ -154,6 +158,7 @@ public class QuizzActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quizz);
 
+        // Récupératio des ID's
         btn_next = (Button) findViewById(R.id.button_next);
         textview_question = (TextView) findViewById(R.id.textview_question);
         radiogroup_reponses = (RadioGroup) findViewById(R.id.radiogroup_reponses);
