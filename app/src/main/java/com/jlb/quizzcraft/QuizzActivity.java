@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -129,11 +130,11 @@ public class QuizzActivity extends AppCompatActivity {
 
             // Pose une question
             currentQA = questionnaire.askQuestion();
-            textview_question.setText(currentQA.getQuestion());
-            radiobtn_reponse_1.setText(currentQA.getAnswer_1());
-            radiobtn_reponse_2.setText(currentQA.getAnswer_2());
-            radiobtn_reponse_3.setText(currentQA.getAnswer_3());
-            radiobtn_reponse_4.setText(currentQA.getAnswer_4());
+            textview_question.setText(Html.fromHtml(currentQA.getQuestion()));
+            radiobtn_reponse_1.setText(Html.fromHtml(currentQA.getAnswer_1()));
+            radiobtn_reponse_2.setText(Html.fromHtml(currentQA.getAnswer_2()));
+            radiobtn_reponse_3.setText(Html.fromHtml(currentQA.getAnswer_3()));
+            radiobtn_reponse_4.setText(Html.fromHtml(currentQA.getAnswer_4()));
             int imageId = getResources().getIdentifier(currentQA.getImage(), "drawable", "com.jlb.quizzcraft");
             image.setImageDrawable(getResources().getDrawable(imageId));
 
@@ -181,11 +182,11 @@ public class QuizzActivity extends AppCompatActivity {
 
         // Pose une question
         currentQA = questionnaire.askQuestion();
-        textview_question.setText(currentQA.getQuestion());
-        radiobtn_reponse_1.setText(currentQA.getAnswer_1());
-        radiobtn_reponse_2.setText(currentQA.getAnswer_2());
-        radiobtn_reponse_3.setText(currentQA.getAnswer_3());
-        radiobtn_reponse_4.setText(currentQA.getAnswer_4());
+        textview_question.setText(Html.fromHtml(currentQA.getQuestion()));
+        radiobtn_reponse_1.setText(Html.fromHtml(currentQA.getAnswer_1()));
+        radiobtn_reponse_2.setText(Html.fromHtml(currentQA.getAnswer_2()));
+        radiobtn_reponse_3.setText(Html.fromHtml(currentQA.getAnswer_3()));
+        radiobtn_reponse_4.setText(Html.fromHtml(currentQA.getAnswer_4()));
         int imageId = getResources().getIdentifier(currentQA.getImage(), "drawable", "com.jlb.quizzcraft");
         image.setImageDrawable(getResources().getDrawable(imageId));
 
