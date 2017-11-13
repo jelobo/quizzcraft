@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/menu_level"
+        android:enabled="false"
+        android:title="Niveau"
+        />
+
+    <item
+        android:id="@+id/menu_music_enabled"
+        android:checkable="true"
+        android:checked="true"
+        android:title="Musique"
+        />
+
+    <item
+        android:id="@+id/menu_apropos"
+        android:title="A propos"
+        />
+
+
+</menu>

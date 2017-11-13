@@ -50,4 +50,4 @@ public class QA {
 
     public String getImage() {return image; }
 
-    }
+}

@@ -59,13 +59,22 @@ public class ListOfQuestions {
         list.add(new QA("Est-ce que une éponge peut absorber de la lave ?", "peut-être", "non", "parfois", "sûrement",2 , "bobsponge" ));
         list.add(new QA("Le Creeper était à la base :", "quelque chose", "un cochon", "un homme-cochon", "un pig-men", 2, "creeper" ));
         list.add(new QA("Comment s'appelle l'ennemi ci-dessous ?", "ghast", "ghost", "ghist", "ghaist",1 , "ghast" ));
+        list.add(new QA("Quel est le personnage de base ?", "steve", "alex", "axel", "stevi",1 , "steve" ));
+        list.add(new QA("Comment s'appelle le mob ci-dessous ?", "shulker", "sulcer", "seulkeur", "shulkeur", 1, "shulker" ));
+        list.add(new QA("Comment s'appelle le boss de fin ?", "Wither", "Dragon", "EnderDragon", "EnderMan", 3, "ender" ));
+        list.add(new QA("Est-ce que ce block existe sans mod ?", "je sais pas", "non", "sûrement", "oui", 4, "structureblock" ));
+        list.add(new QA("Comment s'appelais Minecraft à l'époque ?", "Minecraft", "Cavegame", "Creativers", "Trove", 2, "mc2" ));
+        list.add(new QA("Quels animaux fournissent du cuir ?", "cheval et vache", "cheval et cochon", "vache et mouton", "creeper", 1, "cuir" ));
+        list.add(new QA("Combien a ton de place dans l'inventaire (invantaire,armure et main gauche) ?", "2", "4", "36", "41",4 , "chest" ));
+     //   list.add(new QA("", "", "", "", "", , "" ));
+     //   list.add(new QA("", "", "", "", "", , "" ));
 
         // Debug
         Log.d("ListOfQuestions", "Nombre de questions disponibles: " + list.size());
         Log.d("ListOfQuestions", "Profondeur des dernières questions posées: " + mLastQa.size());
     }
 
-    public QA askQuestion() {
+    public static QA askQuestion() {
         int mRnd = 0;
         boolean mAlreadyChosen = false;
 
@@ -92,5 +101,7 @@ public class ListOfQuestions {
 
         return list.get(mRnd);
     }
+
+    public static int getNbOfQuestions() { return list.size(); }
 }
 

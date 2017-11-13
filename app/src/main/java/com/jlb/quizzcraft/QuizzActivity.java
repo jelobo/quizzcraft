@@ -1,6 +1,7 @@
 package com.jlb.quizzcraft;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -17,7 +18,7 @@ import android.widget.TextView;
 public class QuizzActivity extends AppCompatActivity {
 
     QA currentQA = new QA();
-    ListOfQuestions questionnaire = new ListOfQuestions();
+    //ListOfQuestions questionnaire = new ListOfQuestions();
     private int mReponse = 0;
     private int mEtoiles = 4;
     private int mNbQuestions = 1;
@@ -97,6 +98,9 @@ public class QuizzActivity extends AppCompatActivity {
                     builder.setNegativeButton("Quitter", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
+                            // Arrête la musique
+                            stopService(new Intent(getBaseContext(), MusicService.class));
+
                             finish();
                         }
 
@@ -129,7 +133,7 @@ public class QuizzActivity extends AppCompatActivity {
             setTitle("Question " + Integer.toString(mNbQuestions) + "/5");
 
             // Pose une question
-            currentQA = questionnaire.askQuestion();
+            currentQA = ListOfQuestions.askQuestion();
             textview_question.setText(Html.fromHtml(currentQA.getQuestion()));
             radiobtn_reponse_1.setText(Html.fromHtml(currentQA.getAnswer_1()));
             radiobtn_reponse_2.setText(Html.fromHtml(currentQA.getAnswer_2()));
@@ -181,7 +185,7 @@ public class QuizzActivity extends AppCompatActivity {
         btn_next.setOnClickListener(clickListenerNextBtn);
 
         // Pose une question
-        currentQA = questionnaire.askQuestion();
+        currentQA = ListOfQuestions.askQuestion();
         textview_question.setText(Html.fromHtml(currentQA.getQuestion()));
         radiobtn_reponse_1.setText(Html.fromHtml(currentQA.getAnswer_1()));
         radiobtn_reponse_2.setText(Html.fromHtml(currentQA.getAnswer_2()));
