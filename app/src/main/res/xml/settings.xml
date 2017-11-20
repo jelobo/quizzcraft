@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="difficulty">
+
+        <ListPreference
+            android:title="Difficulté"
+            android:summary="Niveau de difficulté"
+            android:key="listprefLevel"
+            android:dialogTitle="Niveau de difficulté"
+            android:entries="@array/level_display"
+            android:entryValues="@array/level_name"
+            android:dependency="difficulty"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Musique">
+        <SwitchPreference
+            android:key="checkBoxMusicOnOff"
+            android:summaryOff="Désactivé"
+            android:summaryOn="Activé"
+            android:defaultValue="true"
+            />
+        <EditTextPreference
+            android:dialogTitle="Volume de la musigue"
+            android:key="editTextMusicVolume"
+            android:negativeButtonText="Annuler"
+            android:positiveButtonText="OK"
+            android:summary="0..100%"
+            android:title="Volume"
+            />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

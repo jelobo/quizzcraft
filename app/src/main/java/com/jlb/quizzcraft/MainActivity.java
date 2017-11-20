@@ -2,7 +2,10 @@ package com.jlb.quizzcraft;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,21 +18,19 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btn_new_game = null;
     static public boolean mMusicEnabled = true;
-    static public Intent musicIntent = null;
+    static private Intent musicIntent = null;
+    private SharedPreferences mPrefs = null;
+    //public static MediaPlayer player = null;
+    public static SharedPreferences.OnSharedPreferenceChangeListener listener;
 
-     // Cycle de vie
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.d("MainActivity", "onCreate");
+        Log.d("LOG", "MainActivity: onCreate");
 
-        // Démarre la musique
-        musicIntent = new Intent(this, MusicService.class);
-
-        // Init de la liste de questions
-        new ListOfQuestions(0);
+        // Crée un intent pour accéder au service de musique
+        musicIntent = new Intent(this, IntentMusicService.class);
 
         btn_new_game = (Button) findViewById(R.id.btn_new_game);
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         btn_new_game.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                 // Lance l'activité Quizz
+                // Lance l'activité Quizz
                 Intent quizzActivityIntent = new Intent(MainActivity.this, QuizzActivity.class);
                 startActivity(quizzActivityIntent);
 
@@ -45,14 +46,91 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Set le niveau de difficulté
+        switch (mPrefs.getString("listprefLevel", "error")) {
+            case "level_noob":
+                new ListOfQuestions(0);
+                break;
+            case "level_normal":
+                new ListOfQuestions(1);
+                break;
+            case "level_hardcore":
+                new ListOfQuestions(2);
+                break;
+            default:
+                new ListOfQuestions(0);
+                Log.d("LOG", "MainActivity : listprefLevel error");
+        }
+
+        // Configure la musique on ou off en fonction du setting
+        mMusicEnabled = mPrefs.getBoolean("checkBoxMusicOnOff", true);
+        if (mMusicEnabled) {
+            musicIntent.putExtra("PLAYER_COMMAND", "START");
+        } else {
+            musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
+
+        }
+        startService(musicIntent);
+
+        mPrefs.registerOnSharedPreferenceChangeListener(
+                //new SharedPreferences.OnSharedPreferenceChangeListener() {
+                listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+
+                    public void onSharedPreferenceChanged(
+                            SharedPreferences prefs, String key) {
+
+                        Log.d("LOG", "MainActivity : onSharePreferenceChanged " + key);
+
+                        switch (key) {
+                            case "checkBoxMusicOnOff":
+                                if (!mPrefs.getBoolean("checkBoxMusicOnOff", true)) {
+                                    // Met en pause la musique
+                                    //musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
+
+                                    Log.d("LOG", "MainActivity : Music disabled " + key);
+                                    mMusicEnabled = false;
+                                } else {
+                                    // Re-démarre la musique
+                                    //musicIntent.putExtra("PLAYER_COMMAND", "START");
+
+                                    Log.d("LOG", "MainActivity : Music enabled " + key);
+                                    mMusicEnabled = true;
+                                }
+                                //startService(musicIntent);
+
+                                break;
+
+                            case "listprefLevel":
+                                switch (mPrefs.getString("listprefLevel", "error")) {
+                                    case "level_noob":
+                                        new ListOfQuestions(0);
+                                        break;
+                                    case "level_normal":
+                                        new ListOfQuestions(1);
+                                        break;
+                                    case "level_hardcore":
+                                        new ListOfQuestions(2);
+                                        break;
+                                    default:
+                                            Log.d("LOG", "MainActivity : listprefLevel error");
+                                }
+
+                        }
+
+                    }
+                });
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        Log.d("MainActivity", "onResume");
+        Log.d("LOG", "MainActivity : onResume");
         if (mMusicEnabled) {
+            musicIntent.putExtra("PLAYER_COMMAND", "START");
             startService(musicIntent);
         }
     }
@@ -61,55 +139,33 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 
-        Log.d("MainActivity", "onPause");
-        if (mMusicEnabled ) {
-            stopService(musicIntent);
-        }
+        Log.d("LOG", "MainActivity : onPause");
+        //if (mMusicEnabled) {
+        musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
+        startService(musicIntent);
+        //}
     }
 
     // Gestion du menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_configuration, menu);
+
+        Log.d("LOG", "MainActivity : Menu: onCreate");
+
         return true;
     }
 
     // Menu
-
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
-            case R.id.menu_level_noob:
-                // Niveau de difficulté Noob
-                new ListOfQuestions(0);
-                item.setChecked(true);
-                return true;
 
-            case R.id.menu_level_average:
-                // Niveau de difficulté Moyen
-                new ListOfQuestions(1);
-                item.setChecked(true);
-                return true;
+            case R.id.menu_settings:
+                // Affiche les settings
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(settingsIntent);
 
-            case R.id.menu_level_hardcore:
-                // Niveau de difficulté Hardcore
-                new ListOfQuestions(2);
-                item.setChecked(true);
-                return true;
-
-            case R.id.menu_music_enabled:
-                if (item.isChecked()) {
-                    // Met en pause la musique
-                     stopService(musicIntent);
-
-                    mMusicEnabled = false;
-                    item.setChecked(false);
-                } else {
-                    // Re-démarre la musique
-                    startService(musicIntent);
-
-                    mMusicEnabled = true;
-                    item.setChecked(true);
-                }
                 return true;
 
             case R.id.menu_apropos:

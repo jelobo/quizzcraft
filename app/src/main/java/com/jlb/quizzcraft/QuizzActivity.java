@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ public class QuizzActivity extends AppCompatActivity {
     private int mEtoiles = 4;
     private int mNbQuestions = 1;
     private int mScore = 0;
+    static private Intent musicIntent = null;
 
     private Button btn_next = null;
     private TextView textview_question = null;
@@ -78,7 +80,7 @@ public class QuizzActivity extends AppCompatActivity {
                     builder.setMessage("Votre score est de " + Integer.toString(mScore) + " / 20");
                     builder.setCancelable(false);
 
-                    // Bouton "Rejouer" -> nouvelle partie
+                    // Bouton "Rejouer"
                     builder.setPositiveButton("Rejouer", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
@@ -94,12 +96,12 @@ public class QuizzActivity extends AppCompatActivity {
                         }
                     });
 
-                    // Bouton "Quitter" -> ferme l'application
-                    builder.setNegativeButton("Quitter", new DialogInterface.OnClickListener() {
+                    // Bouton "Menu principal"
+                    builder.setNegativeButton("Menu", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
 
                             // Arrête la musique
-                            stopService(new Intent(getBaseContext(), MusicService.class));
+                            //stopService(new Intent(getBaseContext(), MusicService.class));
 
                             finish();
                         }
@@ -158,6 +160,7 @@ public class QuizzActivity extends AppCompatActivity {
         }
     };
 
+    // Cycle de vie
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -206,5 +209,31 @@ public class QuizzActivity extends AppCompatActivity {
         // Désactive le bouton "Next"
         btn_next.setVisibility(View.INVISIBLE);
 
+        // Crée un intent pour accéder au service de musique
+        musicIntent = new Intent(this, IntentMusicService.class);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Log.d("LOG", "QuizzActivity : onResume");
+
+        if (MainActivity.mMusicEnabled) {
+            musicIntent.putExtra("PLAYER_COMMAND", "START");
+            startService(musicIntent);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        Log.d("LOG", "QuizzActivity : onPause");
+        if (MainActivity.mMusicEnabled) {
+            musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
+            startService(musicIntent);
+        }
     }
 }

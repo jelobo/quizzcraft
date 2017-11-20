@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    android:textSize="20sp"
-    android:textColor="#0000A0"
-    android:gravity="center_horizontal"
-    android:text="Réponds à 5 questions relatives à Minecraft en un minimum d'essais !"
-    />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:src="@drawable/quizzcraft"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Réponds à 5 questions relatives à Minecraft en un minimum d'essais !"
+        android:textColor="#0000A0"
+        android:textSize="20sp"/>
 
     <ImageView
         android:layout_width="match_parent"
@@ -26,7 +29,8 @@
         android:id="@+id/btn_new_game"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:text="Nouvelle partie"/>
 </LinearLayout>

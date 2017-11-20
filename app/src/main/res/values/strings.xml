@@ -7,4 +7,15 @@
     <string name="radiobtn_default_answer_2">Réponse B</string>
     <string name="radiobtn_default_answer_3">Réponse C</string>
     <string name="radiobtn_default_answer_4">Réponse D</string>
+    <string-array name="level_display">
+        <item>Noob</item>
+        <item>Normal</item>
+        <item>Hardcore</item>
+    </string-array>
+    <string-array name="level_name">
+        <item>level_noob</item>
+        <item>level_normal</item>
+        <item>level_hardcore</item>
+    </string-array>
+
 </resources>

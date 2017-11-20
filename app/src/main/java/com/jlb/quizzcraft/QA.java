@@ -13,6 +13,7 @@ public class QA {
     private String answer_4;
     private int good_answer;
     private String image;
+    private int level;
 
     public QA() {
         this.question = "";
@@ -22,9 +23,10 @@ public class QA {
         this.answer_4 = "";
         this.good_answer = 0;
         this.image = "";
+        this.level = 0;
     }
 
-    public QA(String pQuestion, String pAnswer_1, String pAnswer_2, String pAnswer_3, String pAnswer_4, int pGoodAnswer, String pImage) {
+    public QA(String pQuestion, String pAnswer_1, String pAnswer_2, String pAnswer_3, String pAnswer_4, int pGoodAnswer, String pImage, int pLevel) {
         this.question = pQuestion;
         this.answer_1 = pAnswer_1;
         this.answer_2 = pAnswer_2;
@@ -32,6 +34,7 @@ public class QA {
         this.answer_4 = pAnswer_4;
         this.good_answer = pGoodAnswer;
         this.image = pImage;
+        this.level = pLevel;
     }
 
     public String getQuestion() {
@@ -49,5 +52,7 @@ public class QA {
     public int getResult() {return good_answer; }
 
     public String getImage() {return image; }
+
+    public int getLevel() { return  level; }
 
 }
