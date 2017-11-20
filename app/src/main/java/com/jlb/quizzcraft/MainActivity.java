@@ -3,7 +3,6 @@ package com.jlb.quizzcraft;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -20,8 +19,8 @@ public class MainActivity extends AppCompatActivity {
     static public boolean mMusicEnabled = true;
     static private Intent musicIntent = null;
     private SharedPreferences mPrefs = null;
-    //public static MediaPlayer player = null;
     public static SharedPreferences.OnSharedPreferenceChangeListener listener;
+    private boolean mMenuEnabled = false;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         startService(musicIntent);
 
         mPrefs.registerOnSharedPreferenceChangeListener(
-                //new SharedPreferences.OnSharedPreferenceChangeListener() {
+
                 listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
 
                     public void onSharedPreferenceChanged(
@@ -87,18 +86,18 @@ public class MainActivity extends AppCompatActivity {
                             case "checkBoxMusicOnOff":
                                 if (!mPrefs.getBoolean("checkBoxMusicOnOff", true)) {
                                     // Met en pause la musique
-                                    //musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
+                                    musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
 
                                     Log.d("LOG", "MainActivity : Music disabled " + key);
                                     mMusicEnabled = false;
                                 } else {
                                     // Re-démarre la musique
-                                    //musicIntent.putExtra("PLAYER_COMMAND", "START");
+                                    musicIntent.putExtra("PLAYER_COMMAND", "START");
 
                                     Log.d("LOG", "MainActivity : Music enabled " + key);
                                     mMusicEnabled = true;
                                 }
-                                //startService(musicIntent);
+                                startService(musicIntent);
 
                                 break;
 
@@ -114,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                                         new ListOfQuestions(2);
                                         break;
                                     default:
-                                            Log.d("LOG", "MainActivity : listprefLevel error");
+                                        Log.d("LOG", "MainActivity : listprefLevel error");
                                 }
 
                         }
@@ -133,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
             musicIntent.putExtra("PLAYER_COMMAND", "START");
             startService(musicIntent);
         }
+        mMenuEnabled = false;
     }
 
     @Override
@@ -140,10 +140,10 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
 
         Log.d("LOG", "MainActivity : onPause");
-        //if (mMusicEnabled) {
-        musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
-        startService(musicIntent);
-        //}
+        if (! mMenuEnabled) {
+            musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
+            startService(musicIntent);
+        }
     }
 
     // Gestion du menu
@@ -163,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.menu_settings:
                 // Affiche les settings
+                mMenuEnabled = true;
                 Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(settingsIntent);
 

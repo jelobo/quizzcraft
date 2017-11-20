@@ -18,10 +18,13 @@ public class IntentMusicService extends IntentService {
     public void onCreate() {
         super.onCreate();
 
-        if (player == null)
+        if (player == null) {
             player = MediaPlayer.create(getApplicationContext(), R.raw.c418);
+            player.setLooping(true);
+            player.setVolume(0.50f,0.50f);
 
-        Log.d("LOG","IntentMusicService : onCreate player="+player);
+            Log.d("LOG", "IntentMusicService : onCreate player=" + player);
+        }
     }
 
     @Override
@@ -40,7 +43,8 @@ public class IntentMusicService extends IntentService {
                  break;
 
              case "PAUSE":
-                 player.pause();
+                 if (player.isPlaying())
+                     player.pause();
                  break;
 
              default:
