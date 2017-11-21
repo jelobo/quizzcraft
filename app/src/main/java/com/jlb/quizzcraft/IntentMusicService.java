@@ -8,9 +8,9 @@ import android.util.Log;
 public class IntentMusicService extends IntentService {
 
     static MediaPlayer player = null;
-    private static final float mVolume = 0.5f;
+    private float mVolume = 0.5f;
 
-    public  IntentMusicService() {
+    public IntentMusicService() {
         super("com.jlb.quizzcraft.IntentMusicService");
 
     }
@@ -21,35 +21,38 @@ public class IntentMusicService extends IntentService {
         if (player == null) {
             player = MediaPlayer.create(getApplicationContext(), R.raw.c418);
             player.setLooping(true);
-            player.setVolume(0.50f,0.50f);
+            //player.setVolume(0.50f,0.50f);
 
             Log.d("LOG", "IntentMusicService : onCreate player=" + player);
         }
     }
 
+    // Gestion de l'intent
     @Override
     protected void onHandleIntent(Intent intent) {
-         Log.d("LOG", "MusicService : Commande " + intent.getStringExtra("PLAYER_COMMAND"));
-         String mCmd = intent.getStringExtra("PLAYER_COMMAND");
-         switch (mCmd) {
 
-             case "START":
-                 player.start();
-                 break;
+        // Démarre / suspend la lecture
+        if (intent.hasExtra("PLAY")) {
+            if (intent.getBooleanExtra("PLAY", false)) {
 
-             case "STOP":
-                 player.stop();
-                 player.release();
-                 break;
+                // Démarrage de la lecture
+                Log.d("LOG", "MusicService : START");
+                player.start();
+            } else {
 
-             case "PAUSE":
-                 if (player.isPlaying())
-                     player.pause();
-                 break;
+                // Pause de la lecture
+                Log.d("LOG", "MusicService : PAUSE");
+                if (player.isPlaying()) {
+                    player.pause();
+                }
+            }
+        }
+        // Réglage du volume de lecture
+        if (intent.hasExtra("VOLUME")) {
+            mVolume = Integer.parseInt(intent.getStringExtra("VOLUME")) / 100.0f;
+            Log.d("LOG", "MusicService : VOLUME " + Float.toString(mVolume));
+            player.setVolume(mVolume, mVolume);
+        }
 
-             default:
-                 Log.d("LOG", "MusicService : Erreur: commande non reconnue (" + intent.getStringExtra("PLAYER_COMMAND")+ ")");
-                 break;
-         }
-     }
+    }
 }

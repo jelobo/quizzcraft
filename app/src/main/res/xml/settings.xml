@@ -21,13 +21,13 @@
             android:summaryOn="Activé"
             android:defaultValue="true"
             />
-        <EditTextPreference
-            android:dialogTitle="Volume de la musigue"
-            android:key="editTextMusicVolume"
-            android:negativeButtonText="Annuler"
-            android:positiveButtonText="OK"
-            android:summary="0..100%"
+
+        <SeekBarPreference
+            android:key="seekbarVolume"
             android:title="Volume"
+            android:min="0"
+            android:max="100"
+            android:defaultValue="30"
             />
     </PreferenceCategory>
 

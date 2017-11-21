@@ -47,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
-        // Set le niveau de difficulté
+        // Nettoyage des préférences
+        //PreferenceManager.getDefaultSharedPreferences(getBaseContext()).edit().clear().apply();
+
+        // Fixe le niveau de difficulté
         switch (mPrefs.getString("listprefLevel", "error")) {
             case "level_noob":
                 new ListOfQuestions(0);
@@ -62,17 +65,23 @@ public class MainActivity extends AppCompatActivity {
                 new ListOfQuestions(0);
                 Log.d("LOG", "MainActivity : listprefLevel error");
         }
+        
+
+        // Fixe le volume par défaut
+        musicIntent.putExtra("VOLUME", Integer.toString(mPrefs.getInt("seekbarVolume", 0)));
+        startService(musicIntent);
 
         // Configure la musique on ou off en fonction du setting
         mMusicEnabled = mPrefs.getBoolean("checkBoxMusicOnOff", true);
         if (mMusicEnabled) {
-            musicIntent.putExtra("PLAYER_COMMAND", "START");
+            musicIntent.putExtra("PLAY", true);
         } else {
-            musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
+            musicIntent.putExtra("PLAY", false);
 
         }
         startService(musicIntent);
 
+        // Création du listenr de préférences
         mPrefs.registerOnSharedPreferenceChangeListener(
 
                 listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
@@ -86,13 +95,13 @@ public class MainActivity extends AppCompatActivity {
                             case "checkBoxMusicOnOff":
                                 if (!mPrefs.getBoolean("checkBoxMusicOnOff", true)) {
                                     // Met en pause la musique
-                                    musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
+                                    musicIntent.putExtra("PLAY", false);
 
                                     Log.d("LOG", "MainActivity : Music disabled " + key);
                                     mMusicEnabled = false;
                                 } else {
                                     // Re-démarre la musique
-                                    musicIntent.putExtra("PLAYER_COMMAND", "START");
+                                    musicIntent.putExtra("PLAY", true);
 
                                     Log.d("LOG", "MainActivity : Music enabled " + key);
                                     mMusicEnabled = true;
@@ -116,6 +125,14 @@ public class MainActivity extends AppCompatActivity {
                                         Log.d("LOG", "MainActivity : listprefLevel error");
                                 }
 
+                                break;
+
+                            case "seekbarVolume":
+                                // Fixe le volume de la musique
+                                musicIntent.putExtra("VOLUME", Integer.toString(mPrefs.getInt("seekbarVolume", 0)));
+                                startService(musicIntent);
+
+                                break;
                         }
 
                     }
@@ -129,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("LOG", "MainActivity : onResume");
         if (mMusicEnabled) {
-            musicIntent.putExtra("PLAYER_COMMAND", "START");
+            musicIntent.putExtra("PLAY", true);
             startService(musicIntent);
         }
         mMenuEnabled = false;
@@ -141,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("LOG", "MainActivity : onPause");
         if (! mMenuEnabled) {
-            musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
+            musicIntent.putExtra("PLAY", false);
             startService(musicIntent);
         }
     }
