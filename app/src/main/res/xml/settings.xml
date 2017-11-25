@@ -4,8 +4,8 @@
         android:key="difficulty">
 
         <ListPreference
-            android:title="Difficulté"
-            android:summary="Niveau de difficulté"
+            android:title="Niveau de difficulté"
+            android:summary=""
             android:key="listprefLevel"
             android:dialogTitle="Niveau de difficulté"
             android:entries="@array/level_display"

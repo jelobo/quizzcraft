@@ -38,6 +38,7 @@ public class IntentMusicService extends IntentService {
                 // Démarrage de la lecture
                 Log.d("LOG", "MusicService : START");
                 player.start();
+
             } else {
 
                 // Pause de la lecture
@@ -46,13 +47,15 @@ public class IntentMusicService extends IntentService {
                     player.pause();
                 }
             }
+            intent.removeExtra("PLAY");
         }
+
         // Réglage du volume de lecture
         if (intent.hasExtra("VOLUME")) {
             mVolume = Integer.parseInt(intent.getStringExtra("VOLUME")) / 100.0f;
             Log.d("LOG", "MusicService : VOLUME " + Float.toString(mVolume));
             player.setVolume(mVolume, mVolume);
+            intent.removeExtra("VOLUME");
         }
-
     }
 }

@@ -166,6 +166,8 @@ public class QuizzActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quizz);
 
+        Log.d("LOG", "QuizzActivity: onCreate");
+
         // Récupératio des ID's
         btn_next = (Button) findViewById(R.id.button_next);
         textview_question = (TextView) findViewById(R.id.textview_question);
@@ -221,7 +223,7 @@ public class QuizzActivity extends AppCompatActivity {
         Log.d("LOG", "QuizzActivity : onResume");
 
         if (MainActivity.mMusicEnabled) {
-            musicIntent.putExtra("PLAYER_COMMAND", "START");
+            musicIntent.putExtra("PLAY", true);
             startService(musicIntent);
         }
     }
@@ -232,7 +234,7 @@ public class QuizzActivity extends AppCompatActivity {
 
         Log.d("LOG", "QuizzActivity : onPause");
         if (MainActivity.mMusicEnabled) {
-            musicIntent.putExtra("PLAYER_COMMAND", "PAUSE");
+            musicIntent.putExtra("PLAY", false);
             startService(musicIntent);
         }
     }
